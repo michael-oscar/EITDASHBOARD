@@ -14,6 +14,11 @@ class EditEIT extends Component{
             Country:"",
             
         }
+
+        this.Fullname = React.createRef();
+        this.Phonenumber = React.createRef();
+        this.Email = React.createRef();
+        this.Country = React.createRef();
     }
     // when there is a change in the 
     handleChange = (event) => {
@@ -23,12 +28,20 @@ class EditEIT extends Component{
         })
     }
     // when an entry is submited
-    handleSubmit =(event) => {
+    handleSubmit(id) {
         event.preventDefault();
-        // saves created data files
-        EITDB.insert(this.state);
+        // updates created data files
+        EITDB.update(id, {
+            $set: {
+                Fullname: this.Fullname.value,
+                Phonenumber: this.Phonenumber.value,
+                Email: this.Email.value,
+                Country: this.Country.value,
+            }
+        })
         // alert(" your entry has been saved!")
         this.props.history.push('/');
+        // console.log(this.Fullname.value);
 
     }
 
@@ -38,7 +51,9 @@ class EditEIT extends Component{
 
 // this is where the stuffs for output is kept
     render(){
-        console.log(this.state);
+        // console.log(this.state);
+
+        const eit = this.props.eit;
         return(
             <div>
                 <div className="text-center">
@@ -47,7 +62,7 @@ class EditEIT extends Component{
         <hr />
 
         <div className="jumbotron" style={{ margin: "0 500px" }}>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={() => this.handleSubmit(eit._id)}>
 
             <div className="form-group">
              <label> Full Name:</label>	
@@ -55,9 +70,9 @@ class EditEIT extends Component{
               type= "text"
               className="form-control"
               name="Fullname"
-              value={this.state.Fullname}
-              onChange={this.handleChange}
-            placeholder="Enter your First Name"
+              defaultValue={eit ? eit.Fullname : ''}
+              ref={ref => this.Fullname = ref}
+              placeholder="Enter your First Name"
               required/>
             </div>
 
@@ -66,8 +81,8 @@ class EditEIT extends Component{
               type= "email"
               className="form-control"
               name="Email"
-              value={this.state.Email}
-              onChange={this.handleChange}
+              defaultValue={eit ? eit.Email : ''}
+              ref={ref => this.Email = ref}
           	placeholder="Enter email Address"
               required/>
               </div>
@@ -77,8 +92,8 @@ class EditEIT extends Component{
               type= "tel"
               className="form-control"
               name="Phonenumber"
-              value={this.state.Phonenumber}
-              onChange={this.handleChange}
+              defaultValue={eit ? eit.Phonenumber : ''}
+              ref={ref => this.Phonenumber = ref}
           	placeholder="Enter full name"
               required/>
               </div>
@@ -88,8 +103,8 @@ class EditEIT extends Component{
               type= "text"
               className="form-control"
               name="Country"
-              value={this.state.Country}
-              onChange={this.handleChange}
+              defaultValue={eit ? eit.Country : ''}
+              ref={ref => this.Country = ref}
           		placeholder="Enter country code"
               required/>
               </div>
