@@ -20,8 +20,12 @@ class ListEIT extends React.Component {
       }
 
       deletedSelected(){
+        // { this.props.currentUser ?
+
           const checkedEits = EITDB.find({ checked: true }).fetch();
           checkedEits.map(eit => EITDB.remove(eit._id));
+        //   : ''
+        // }
       }
 
     deleteEIT(id) {
@@ -46,9 +50,11 @@ class ListEIT extends React.Component {
         </li>
           
                 <td>{eit.Fullname}</td>
+                <td>{eit.Age}</td>
                 <td>{eit.Email}</td>
                 <td>{eit.Phonenumber}</td>
                 <td>{eit.Country}</td>
+                
                 <td>
                    <button > <Link to={`/eits/${eit._id}/edit`}>Edit</Link> </button>
                     <button color="primary" onClick={() => this.deleteEIT(eit._id) } ><span class="glyphicon glyphicon-trash"></span> Delete </button> 
@@ -71,6 +77,7 @@ class ListEIT extends React.Component {
                         <tr>
                         <th scope="col">      </th>
                             <th scope="col">Full Name</th>
+                            <th scope="col">Age</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone Number</th>
                             <th scope="col">Country</th>

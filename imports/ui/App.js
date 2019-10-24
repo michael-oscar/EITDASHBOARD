@@ -17,7 +17,7 @@ import {
   Button,
    } from 'reactstrap';
 
-
+   import AccountsUIWrapper from './AccountsUIWrapper.js';
 
 import ListEIT from './ListEIT.js';
 import AddEIT from './AddEIT.js';
@@ -25,10 +25,15 @@ import EditEIT from './EditEIT.js';
 
 // createa a REACT component
 class App extends Component {
+
+
+
+
   render() {
     return (
         <Router>
                     <div>
+                    <AccountsUIWrapper />
                     
       <Navbar color="light" light expand="md">
         <NavbarBrand ><h1 className="container success " > EIT EXPRESS </h1></NavbarBrand>

@@ -12,6 +12,7 @@ class EditEIT extends Component{
             Phonenumber:"",
             Email:"",
             Country:"",
+            Age:"",
             
         }
 
@@ -19,6 +20,7 @@ class EditEIT extends Component{
         this.Phonenumber = React.createRef();
         this.Email = React.createRef();
         this.Country = React.createRef();
+        this.Age= React.createRef();
     }
     // when there is a change in the 
     handleChange = (event) => {
@@ -37,6 +39,7 @@ class EditEIT extends Component{
                 Phonenumber: this.Phonenumber.value,
                 Email: this.Email.value,
                 Country: this.Country.value,
+                Age: this.Age.vale,
             }
         })
         // alert(" your entry has been saved!")
@@ -76,6 +79,18 @@ class EditEIT extends Component{
               required/>
             </div>
 
+            
+            <div className="form-group">
+            <label> Age:</label>	<input
+              type= "number"
+              className="form-control"
+              name="Age"
+              defaultValue={eit ? eit.Age : ''}
+              ref={ref => this.Age = ref}
+          	placeholder="Enter Age"
+              required/>
+              </div>
+
             <div className="form-group">
             <label> Email Address:</label>	<input
               type= "email"
@@ -94,7 +109,7 @@ class EditEIT extends Component{
               name="Phonenumber"
               defaultValue={eit ? eit.Phonenumber : ''}
               ref={ref => this.Phonenumber = ref}
-          	placeholder="Enter full name"
+          	placeholder="Enter Phone number"
               required/>
               </div>
 

@@ -10,6 +10,7 @@ class AddEIT extends Component{
             Phonenumber:"",
             Email:"",
             Country:"",
+            Age:"",
             
         }
     }
@@ -24,7 +25,13 @@ class AddEIT extends Component{
     handleSubmit =(event) => {
         event.preventDefault();
         // saves created data files
-        EITDB.insert(this.state);
+        EITDB.insert(
+          // {
+            this.state,
+        //      owner: Meteor.userId(),           // _id of logged in user
+        // username: Meteor.user().username,  // username of logged in user
+        //   }
+          );
         // alert(" your entry has been saved!")
         
         this.props.history.push('/');
@@ -56,6 +63,18 @@ class AddEIT extends Component{
             </div>
 
             <div className="form-group">
+            <label> Age:</label>	<input
+              type= "number"
+              className="form-control"
+              name="Age"
+              value={this.state.Age}
+              onChange={this.handleChange}
+          	placeholder="Enter Age"
+              required/>
+              </div>
+
+
+            <div className="form-group">
             <label> Email Address:</label>	<input
               type= "email"
               className="form-control"
@@ -73,7 +92,7 @@ class AddEIT extends Component{
               name="Phonenumber"
               value={this.state.Phonenumber}
               onChange={this.handleChange}
-          	placeholder="Enter full name"
+          	placeholder="Enter Phone Number"
               required/>
               </div>
 
