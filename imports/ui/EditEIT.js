@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import { withTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
 
 import { EITDB } from '../api/db.js';
 
@@ -30,33 +31,24 @@ class EditEIT extends Component{
         })
     }
     // when an entry is submited
-    handleSubmit(id) {
+    handleSubmit(event,id) {
         event.preventDefault();
         // updates created data files
-        EITDB.update(id, {
-            $set: {
-                Fullname: this.Fullname.value,
-                Phonenumber: this.Phonenumber.value,
-                Email: this.Email.value,
-                Country: this.Country.value,
-                Age: this.Age.vale,
-            }
-        })
+        Meteor.call('Eitdbcall.update',id,this.Fullname.value,Number(this.Age.value),this.Email.value,this.Phonenumber.value,this.Country.value);
         // alert(" your entry has been saved!")
         this.props.history.push('/');
         // console.log(this.Fullname.value);
-
+        return false;
     }
 
     componentWillMount() {
-        console.log(this.props);
+        //console.log(this.props);
     }
 
 // this is where the stuffs for output is kept
     render(){
-        // console.log(this.state);
-
         const eit = this.props.eit;
+        console.log(this.props.id)
         return(
             <div>
                 <div className="text-center">
@@ -65,7 +57,7 @@ class EditEIT extends Component{
         <hr />
 
         <div className="jumbotron" style={{ margin: "0 500px" }}>
-          <form onSubmit={() => this.handleSubmit(eit._id)}>
+          <form onSubmit={(event) => this.handleSubmit(event,this.props.id)}>
 
             <div className="form-group">
              <label> Full Name:</label>	
@@ -124,7 +116,7 @@ class EditEIT extends Component{
               required/>
               </div>
 
-              <button type= "submit" className= "btn btn-primary"> Submit</button>
+              <button type= "submit" className= "btn btn-primary" > Submit</button>
               </form>
               </div>
              </div>
@@ -139,6 +131,8 @@ export default withTracker((props) => {
     // console.log(props.match.params);
     const id = props.match.params.id;
     return {
-        eit: EITDB.findOne(id)
+        eit: EITDB.findOne(id),
+        id,
+        currentUser: Meteor.user(),
     }
 })(EditEIT);

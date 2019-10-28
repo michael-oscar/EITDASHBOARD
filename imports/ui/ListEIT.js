@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Link } from 'react-router-dom';
-
+import { Meteor } from 'meteor/meteor';
 
   
 
@@ -14,22 +14,25 @@ class ListEIT extends React.Component {
 
     toggleChecked(id, checked) {
         // Set the checked property to the opposite of its current value
-        EITDB.update(id, {
-          $set: { checked: checked },
-        });
+        // EITDB.update(id, {
+        //   $set: { checked: checked },
+        // });
+
+        Meteor.call('Eitdbcall.setChecked', id, checked);
       }
 
       deletedSelected(){
-        // { this.props.currentUser ?
-
           const checkedEits = EITDB.find({ checked: true }).fetch();
-          checkedEits.map(eit => EITDB.remove(eit._id));
-        //   : ''
-        // }
+          checkedEits.map(eit => Meteor.call('Eitdbcall.remove', eit._id));
+
+          
+         
       }
 
     deleteEIT(id) {
-        EITDB.remove(id);
+        // EITDB.remove(id);
+
+        Meteor.call('Eitdbcall.remove', id);
     }
 
     renderEITs() {
@@ -57,23 +60,20 @@ class ListEIT extends React.Component {
                 
                 <td>
                    <button > <Link to={`/eits/${eit._id}/edit`}>Edit</Link> </button>
-                    <button color="primary" onClick={() => this.deleteEIT(eit._id) } ><span class="glyphicon glyphicon-trash"></span> Delete </button> 
+                    <button color="primary" onClick={() => this.deleteEIT(eit._id) } ><span className="glyphicon glyphicon-trash"></span> Delete </button> 
                 </td>
             </tr>
         ));
     }
 
-    render() {
-        console.log(this.props.eits);
-
-     
+    render() {     
 
         return (
             <div>
                 <div><h4><center> EIT DIRECTORY BOARD </center></h4></div>
                 
-                <table class="table table-striped">
-                    <thead class="thead-dark">
+                <table className="table table-striped">
+                    <thead className="thead-dark">
                         <tr>
                         <th scope="col">      </th>
                             <th scope="col">Full Name</th>
@@ -92,14 +92,16 @@ class ListEIT extends React.Component {
                     
                     
                 </table>
-                <div class="float-right mr-5" > <button class="btn btn-warning btn-lg btn-block" data-toggle="button" aria-pressed="false" autocomplete="off" onClick={() => this.deletedSelected()}  > Bulk Delete </button> </div>
+                <div className="float-right mr-5" > <button className="btn btn-warning btn-lg btn-block" data-toggle="button" aria-pressed="false" autoComplete="off" onClick={() => this.deletedSelected()}  > Bulk Delete </button> </div>
             </div>
         );
     }
 }
 
 export default withTracker(() => {
+    Meteor.subscribe('Eits');
     return {
-        eits: EITDB.find({}).fetch()
+        eits: EITDB.find({}).fetch(),
+        currentUser: Meteor.user(),
     }
 })(ListEIT);

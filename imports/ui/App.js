@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Meteor } from 'meteor/meteor';
+import {withTracker} from 'meteor/react-meteor-data';
+import {EITDB} from '../api/db.js';
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,6 +20,8 @@ import {
   Button,
    } from 'reactstrap';
 
+
+
    import AccountsUIWrapper from './AccountsUIWrapper.js';
 
 import ListEIT from './ListEIT.js';
@@ -31,18 +36,20 @@ class App extends Component {
 
   render() {
     return (
+      
         <Router>
                     <div>
                     <AccountsUIWrapper />
+                    
                     
       <Navbar color="light" light expand="md">
         <NavbarBrand ><h1 className="container success " > EIT EXPRESS </h1></NavbarBrand>
                    <Nav className="ml-auto" navbar>
             <NavItem>
-              <NavLink> <Link to="/" className="nav-link" class="btn btn-success btn-lg" data-toggle="button" aria-pressed="false" autocomplete="off">ListEIT</Link> ||</NavLink>
+              <Link to="/" className="nav-link btn btn-success btn-lg" data-toggle="button" aria-pressed="false" autoComplete="off">ListEIT</Link>
             </NavItem>
             <NavItem>
-              <NavLink> <Link to="/eits/add" className="nav-link" class="btn btn-danger btn-lg" data-toggle="button" aria-pressed="false" autocomplete="off">AddEIT</Link> ||</NavLink>
+            <Link to="/eits/add" className="nav-link btn btn-danger btn-lg" data-toggle="button" aria-pressed="false" autoComplete="off">AddEIT</Link>
             </NavItem>
             
             </Nav>
@@ -56,9 +63,13 @@ class App extends Component {
           <Route path="/eits/:id/edit" component={EditEIT} />
         </Switch>
       </Router>
+      
     );
   }
 }
 
+export default withTracker(() => {
+  return {
+  }
+})(App);
 
-export default App;
