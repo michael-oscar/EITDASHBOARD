@@ -1,4 +1,5 @@
 import assert from "assert";
+import "../imports/api/eitTests.jsx";
 
 describe("EMAG", function () {
   it("package.json has correct name", async function () {

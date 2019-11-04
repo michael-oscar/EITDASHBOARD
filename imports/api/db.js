@@ -32,8 +32,8 @@ Meteor.methods({
           Email,
           Phonenumber,
           Country,
-          owner: Meteor.userId(),           // _id of logged in user
-          username: Meteor.user().username,
+          owner: this.userId,           // _id of logged in user, was Meteor.userId()
+          username: Meteor.user.username,
         });
     },
 

@@ -57,6 +57,7 @@ class EditEIT extends Component{
         <hr />
 
         <div className="jumbotron" style={{ margin: "0 500px" }}>
+        {this.props.currentUser ?
           <form onSubmit={(event) => this.handleSubmit(event,this.props.id)}>
 
             <div className="form-group">
@@ -117,7 +118,8 @@ class EditEIT extends Component{
               </div>
 
               <button type= "submit" className= "btn btn-primary" > Submit</button>
-              </form>
+              </form>: " please log in"
+          }
               </div>
              </div>
 
