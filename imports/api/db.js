@@ -55,6 +55,10 @@ Meteor.methods({
       },
 
       'Eitdbcall.update'(taskId, Fullname, Age, Email,Phonenumber, Country) {
+        const eit = EITDB.findOne(taskId);
+        if (this.userId !== eit.owner) {
+          throw new Meteor.Error('not-authorized');
+        }
         EITDB.update(taskId, { $set: { Fullname: Fullname, Age: Age, Email: Email, Phonenumber: Phonenumber, Country: Country } });
       },
       

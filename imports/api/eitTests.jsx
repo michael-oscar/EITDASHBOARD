@@ -4,6 +4,7 @@ import { assert } from 'chai';
 import { Accounts } from 'meteor/accounts-base';
 
 import {EITDB} from './db.js';
+import { func } from 'prop-types';
 
 if (Meteor.isServer) {
     describe('EITAPP', () => {
@@ -58,7 +59,7 @@ if (Meteor.isServer) {
                 username: 'Michael',
 
         });
-        const invocation={tUser};
+        const invocation={userId: newUserId};
         const eitPublication =Meteor.server.publish_handlers['Eits'];
 
         assert.strictEqual(eitPublication.apply(invocation).count(),2)
@@ -129,31 +130,40 @@ if (Meteor.isServer) {
        // test it in isolation
        const deleteTask = Meteor.server.method_handlers['Eitdbcall.remove'];
        const invocation = {};
-       deleteTask.apply(invocation, [eitdb]);
-       assert.equal(EITDB.find().count(), 1);
+       assert.throws(function(){
+        deleteTask.apply(invocation,[eitdb]);
+        }, Meteor.Error, '[not-authorized]');
+        assert.equal(EITDB.find().count(), 1); // count is one because on start,
+        //a data entry is added and is not deleted
       });
+
+
         //Edit
       it ('can edit EIT', () => {
         const Fullname = 'Lawna';
         const Age = 25;
+        const Email = 'osaka@gmail.com';
         const Phonenumber = 08043453567;
         const Country = 'Liberia';
-        const owner = newUserId;
+        const owner = tUser;
         const update = Meteor.server.method_handlers['Eitdbcall.update'];
-        const invocation = { userId: newUserId };
-        update.apply(invocation, [eitdb, Fullname, Age, Phonenumber, Country, owner]);
+        const invocation = { userId: tUser };
+        update.apply(invocation, [eitdb, Fullname, Age,Email,Phonenumber, Country]);
         assert.equal(EITDB.find().count(), 1);
       })
 
       it ('cannot edit EIT if not logged in', () => {
         const Fullname = 'Lawna';
         const Age = 25;
+        const Email = 'odfd@SpeechGrammarList.com';
         const Phonenumber = 08043453567;
         const Country = 'Liberia';
+        const owner= newUserId;
         
         const update = Meteor.server.method_handlers['Eitdbcall.update'];
         const invocation = {};
-        assert.throws(() =>  update.apply(invocation, [eitdb, Fullname, Age, Phonenumber, Country]),
+        assert.throws(function() { 
+          update.apply(invocation,[eitdb,Fullname, Age,Email,Phonenumber, Country])},
           Meteor.Error, '[not-authorized]')
         assert.equal(EITDB.find().count(), 1);
       })
@@ -167,12 +177,13 @@ if (Meteor.isServer) {
 
         const Fullname = 'Lawna';
         const Age = 25;
+        const Email= 'kk@SpeechGrammarList.com';
         const Phonenumber = 08043453567;
         const Country = 'Liberia';
         const owner = newUserId;
         const update = Meteor.server.method_handlers['Eitdbcall.update'];
-        const invocation = {tUser};
-        assert.throws(() => update.apply(invocation, [eitdb, owner]),
+        const invocation = {userId: tUser};
+        assert.throws(function() {update.apply(invocation, [eitdb,Fullname, Age,Email,Phonenumber, Country]);},
           Meteor.Error, "[not-authorized]")
         assert.equal(EITDB.find().count(), 1);
       })
